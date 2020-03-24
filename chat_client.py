@@ -18,14 +18,6 @@ def receberMensagens(atoa):
                     interface.adicionarLabelCliente(nick)
                     interfaceLista.adicionarLabelCliente(nick)
 
-                if utils.checkEvent(mensagemRecebida, utils.ADDLABELEVENT):
-                    nick = utils.pegarNickMensagem(mensagemRecebida)
-
-                    interface.adicionarLabelClienteInicio(nick)
-                    interfaceLista.adicionarLabelCliente(nick)
-
-                    continue
-
                 if utils.checkEvent(mensagemRecebida, utils.DISCONNECTEVENT):
                     nick = utils.pegarNickMensagem(mensagemRecebida)
 

@@ -36,22 +36,8 @@ class InterfaceGrafica(Toplevel):
         self.containerLista = Frame(self, width=200)
         self.containerLista.pack(anchor='n', fill=Y, expand=YES)
 
-        """
-
-        self.containerScrollLista = Frame(
-            self.containerLista, width=20, bg='black')
-        self.containerScrollLista.pack(side=RIGHT, fill=Y)
-
-        self.scrollBarLista = Scrollbar(
-            self.containerScrollLista, command=self.containerLista.yview)
-        self.scrollBarLista.pack(expand=YES, fill=BOTH)
-
-        self.containerLista['yscrollcommand'] = self.scrollBarLista.set
-        
-        """
-
     def adicionarLabelCliente(self, nickCliente):
-        label = Label(self.containerLista, text=nickCliente,
+        label = Label(self.containerLista, text=' "' + nickCliente + '" ',
                       borderwidth=2, relief="raised", width=200)
 
         label["font"] = ("Arial", "14")
@@ -64,7 +50,7 @@ class InterfaceGrafica(Toplevel):
         self.usuariosConectados.append(label)
 
     def removerLabelCliente(self, nickCliente):
-        for x in self.labelsUsuarios:
+        for x in self.usuariosConectados:
             if x.cget('text') == nickCliente:
                 x.pack_forget()
 
