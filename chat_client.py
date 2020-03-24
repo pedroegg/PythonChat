@@ -47,11 +47,16 @@ def receberMensagens(atoa):
                     continue
 
                 if utils.checkEvent(mensagemRecebida, utils.PRIVATEMESSAGE):
-                    interfaceLista.abrirChatPrivado(
-                        utils.pegarNickMensagem(mensagemRecebida, 1))
+                    if interfaceLista.interface != None:
+                        interfaceLista.interface.inserirMensagemChat(utils.pegarNickMensagem(
+                            mensagemRecebida, 1) + ': ' + mensagemRecebida.split('}')[2])
+                    else:
+                        nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
-                    interfaceLista.interface.inserirMensagemChat(
-                        mensagemRecebida.split('}')[2])
+                        interfaceLista.abrirChatPrivado(nick)
+
+                        interfaceLista.interface.inserirMensagemChat(
+                            nick + ': ' + mensagemRecebida.split('}')[2])
 
                     continue
 

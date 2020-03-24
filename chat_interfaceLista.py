@@ -68,4 +68,4 @@ class InterfaceGrafica(Toplevel):
         print("mynickname = ", self.mynickname)
         if nickname != self.mynickname:
             self.interface = interfaceChat.InterfaceGrafica(
-                nickname, mynickname, self.sockObj)
+                nickname, self.mynickname, self.sockObj)
