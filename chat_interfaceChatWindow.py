@@ -4,12 +4,14 @@ import chat_utils as utils
 
 
 class InterfaceGrafica(Toplevel):
-    def __init__(self, nickname=None, socket=None):
+    def __init__(self, nickname=None, meunickname=None, socket=None):
         self.sockObj = socket
+        self.nick = nickname
+        self.meunick = meunickname
 
         Toplevel.__init__(self)
         self.geometry("800x480")
-        self.title("Chat privado com " + nickname)
+        self.title("Chat privado com " + self.nick)
 
         self.corVerde = "color-" + 'green'
         self.corAzul = "color-" + 'blue'
@@ -90,50 +92,19 @@ class InterfaceGrafica(Toplevel):
         self.scrollBarInput.pack(expand=YES, fill=BOTH)
         self.input['yscrollcommand'] = self.scrollBarInput.set
 
-    def adicionarLabelCliente(self, nickCliente):
-        label = None
-
-        if self.primeiraVez:
-            label = Label(self.containerTitulo, text=nickCliente)
-
-            self.primeiraVez = False
-        else:
-            label = Label(self.containerTitulo, text=',' + nickCliente)
-
-        label["font"] = ("Arial", "14")
-
-        label.pack(side=LEFT)
-
-        self.labelsUsuarios.append(label)
-
-    def adicionarLabelClienteInicio(self, nickCliente):
-        label = Label(self.containerTitulo, text=',' + nickCliente)
-
-        label["font"] = ("Arial", "14")
-
-        label.pack(side=LEFT)
-
-        self.labelsUsuarios.append(label)
-
-    def removerLabelCliente(self, nickCliente):
-        for x in self.labelsUsuarios:
-            if x.cget('text') == nickCliente:
-                x.pack_forget()
-
-                self.labelsUsuarios.remove(x)
-
     def inserirMensagemChat(self, mensagem):
         textoDataHorario = utils.getHorario() + ' - '
 
         if utils.checkEvent(mensagem, utils.NEWCLIENTEVENT):
             textoNickname = 'Cliente ' + \
-                utils.pegarNickMensagem(mensagem) + ' conectado!'
+                utils.pegarNickMensagem(mensagem, 1) + ' conectado!'
 
             textoMensagem = ''
 
         elif utils.checkEvent(mensagem, utils.DISCONNECTEVENT):
             textoNickname = 'Cliente ' + \
-                utils.pegarNickMensagem(mensagem) + ' desconectou-se do chat!'
+                utils.pegarNickMensagem(mensagem, 1) + \
+                ' desconectou-se do chat!'
 
             textoMensagem = ''
 
@@ -164,8 +135,8 @@ class InterfaceGrafica(Toplevel):
         self.bell(displayof=0)
 
     def enviarMensagem(self):
-        mensagem = utils.encryptMessage(
-            '"' + self.input.get('1.0', 'end-1c') + '"')
+        mensagem = utils.encryptMessage(utils.PRIVATEMESSAGE + '{' + self.meunick + '}{' + self.nick + '}' +
+                                        '"' + self.input.get('1.0', 'end-1c') + '"')
 
         self.sockObj.sendall(mensagem)
 

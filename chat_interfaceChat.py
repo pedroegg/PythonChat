@@ -101,7 +101,11 @@ class InterfaceGrafica:
 
     def removerLabelCliente(self, nickCliente):
         for x in self.labelsUsuarios:
-            if x.cget('text') == nickCliente:
+            nome = x.cget('text')
+
+            lenReplace = len(nome.replace('"', ''))
+
+            if nome.replace('"', '')[1:lenReplace-1] == nickCliente:
                 x.pack_forget()
 
                 self.labelsUsuarios.remove(x)
@@ -111,13 +115,14 @@ class InterfaceGrafica:
 
         if utils.checkEvent(mensagem, utils.NEWCLIENTEVENT):
             textoNickname = 'Cliente ' + \
-                utils.pegarNickMensagem(mensagem) + ' conectado!'
+                utils.pegarNickMensagem(mensagem, 1) + ' conectado!'
 
             textoMensagem = ''
 
         elif utils.checkEvent(mensagem, utils.DISCONNECTEVENT):
             textoNickname = 'Cliente ' + \
-                utils.pegarNickMensagem(mensagem) + ' desconectou-se do chat!'
+                utils.pegarNickMensagem(mensagem, 1) + \
+                ' desconectou-se do chat!'
 
             textoMensagem = ''
 

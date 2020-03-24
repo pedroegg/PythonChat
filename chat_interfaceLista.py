@@ -6,9 +6,12 @@ import chat_interfaceChatWindow as interfaceChat
 
 
 class InterfaceGrafica(Toplevel):
-    def __init__(self, socket):
+    def __init__(self, socket, mynick):
         self.sockObj = socket
+
         self.interface = None
+
+        self.mynickname = mynick
 
         Toplevel.__init__(self)
         self.geometry("200x480+1100+100")
@@ -51,11 +54,18 @@ class InterfaceGrafica(Toplevel):
 
     def removerLabelCliente(self, nickCliente):
         for x in self.usuariosConectados:
-            if x.cget('text') == nickCliente:
+            nome = x.cget('text')
+
+            lenReplace = len(nome.replace('"', ''))
+
+            if nome.replace('"', '')[1:lenReplace-1] == nickCliente:
                 x.pack_forget()
 
                 self.usuariosConectados.remove(x)
 
     def abrirChatPrivado(self, nickname):
-        self.interface = interfaceChat.InterfaceGrafica(
-            str(nickname), self.sockObj)
+        print("nickname = ", nickname)
+        print("mynickname = ", self.mynickname)
+        if nickname != self.mynickname:
+            self.interface = interfaceChat.InterfaceGrafica(
+                nickname, mynickname, self.sockObj)
