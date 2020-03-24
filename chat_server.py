@@ -52,17 +52,21 @@ def connectionHandler(clienteConectado):
                         k, mensagemDecrypted + ' {' + nomeCliente + '}')
             else:
                 if utils.checkEvent(mensagemDecrypted, utils.PRIVATEMESSAGE):
+                    print("Mensagem=" + mensagemDecrypted)
+                    print("NOme para ser enviado = ",
+                          utils.pegarNickMensagem(mensagemDecrypted, 2))
                     clientToSend = utils.getClientByName(
                         clientesObjeto, utils.pegarNickMensagem(mensagemDecrypted, 2))
 
                     if clientToSend != None:
+                        print("CLiente = ", clientToSend.getNomeCliente())
                         utils.sendMessageTo(
                             clientToSend, utils.PRIVATEMESSAGE + ' ' + mensagemDecrypted)
 
                 else:
                     for k in clientesObjeto:
                         utils.sendMessageTo(
-                            k, nomeCliente + ': ' + utils.decryptMessage(mensagem))
+                            k, nomeCliente + ': ' + mensagemDecrypted)
 
         except Exception as e:
             print('{}: Deu ruim na conexão com o cliente {}.'.format(

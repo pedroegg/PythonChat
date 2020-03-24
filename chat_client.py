@@ -12,6 +12,21 @@ def receberMensagens(atoa):
             data = sockObj.recv(1024)
             if data:
                 mensagemRecebida = utils.decryptMessage(data)
+
+                if utils.checkEvent(mensagemRecebida, utils.PRIVATEMESSAGE):
+                    print("ENTROU NO CHECK")
+                    nick = utils.pegarNickMensagem(mensagemRecebida, 1)
+
+                    if interfaceLista.interface == None:
+                        interfaceLista.abrirChatPrivado(nick)
+
+                    interfaceLista.interface.inserirMensagemChat(
+                        nick + ': ' + mensagemRecebida.split('}')[2])
+
+                    print("ERA PRA INSERIR")
+
+                    continue
+
                 if utils.checkEvent(mensagemRecebida, utils.NEWCLIENTEVENT):
                     nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
@@ -43,20 +58,6 @@ def receberMensagens(atoa):
                     nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
                     interface.setarLabelDigitando(nick)
-
-                    continue
-
-                if utils.checkEvent(mensagemRecebida, utils.PRIVATEMESSAGE):
-                    if interfaceLista.interface != None:
-                        interfaceLista.interface.inserirMensagemChat(utils.pegarNickMensagem(
-                            mensagemRecebida, 1) + ': ' + mensagemRecebida.split('}')[2])
-                    else:
-                        nick = utils.pegarNickMensagem(mensagemRecebida, 1)
-
-                        interfaceLista.abrirChatPrivado(nick)
-
-                        interfaceLista.interface.inserirMensagemChat(
-                            nick + ': ' + mensagemRecebida.split('}')[2])
 
                     continue
 
