@@ -64,8 +64,6 @@ class InterfaceGrafica(Toplevel):
                 self.usuariosConectados.remove(x)
 
     def abrirChatPrivado(self, nickname):
-        print("nickname = ", nickname)
-        print("mynickname = ", self.mynickname)
         if nickname != self.mynickname:
             self.interface = interfaceChat.InterfaceGrafica(
                 nickname, self.mynickname, self.sockObj)
