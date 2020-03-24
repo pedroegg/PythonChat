@@ -1,5 +1,6 @@
 from time import strftime
 
+# Eventos definidos por constantes
 TYPINGEVENT = 'typing...'
 STOPPEDTYPINGEVENT = 'stoppedTyping'
 DISCONNECTEVENT = 'disconnect'

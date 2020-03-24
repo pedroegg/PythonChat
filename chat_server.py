@@ -4,18 +4,24 @@ import _thread
 import chat_model as model
 import chat_utils as utils
 
+# Array dos clientes conectados ao servidor
 clientesObjeto = []
 
+# Socket
 sockObj = socket(AF_INET, SOCK_STREAM)
 
+# Host e porta
 meuHost = 'localhost'
 
 minhaPort = 5000
 
 orig = (meuHost, minhaPort)
 
+# EScutando
 sockObj.bind(orig)
 sockObj.listen(1)
+
+# Função executada para controlar e manipular a conexão de cada cliente
 
 
 def connectionHandler(clienteConectado):
@@ -46,6 +52,7 @@ def connectionHandler(clienteConectado):
             print('{}: Cliente {} enviou -> {}'.format(utils.getHorario(),
                                                        nomeCliente, mensagemDecrypted))
 
+            # Verificação do evento enviado pelo cliente
             if utils.checkEvent(mensagemDecrypted, utils.TYPINGEVENT) or utils.checkEvent(mensagemDecrypted, utils.STOPPEDTYPINGEVENT):
                 for k in clientesObjeto:
                     utils.sendMessageTo(
@@ -64,12 +71,13 @@ def connectionHandler(clienteConectado):
 
                         utils.sendMessageTo(
                             clientToSend, utils.PRIVATEMESSAGE + ' ' + mensagemDecrypted)
-
+                # E o servidor envia a mensagem para os ou o destinatário
                 else:
                     for k in clientesObjeto:
                         utils.sendMessageTo(
                             k, nomeCliente + ': ' + mensagemDecrypted)
 
+        # Caso ocorra algum problema com a conexão
         except Exception as e:
             print('{}: Deu ruim na conexão com o cliente {}.'.format(
                 utils.getHorario(), nomeCliente))
@@ -91,6 +99,7 @@ def connectionHandler(clienteConectado):
     _thread.exit()
 
 
+# Loop infinito para escutar novos clientes a se conectar ao servidor
 while True:
     con, cliente = sockObj.accept()
 
@@ -98,15 +107,18 @@ while True:
 
     print("MensagemRecebida = " + msg)
 
+    # Se for um evento de conexão, armazeno a conexão, coloco no array, etc
     if utils.checkEvent(msg, utils.NEWCONNECTIONEVENT):
         print("Nova conexão!")
 
         clienteNovo = model.Cliente(msg.split(' ', 1)[1], con, cliente)
 
+        # Envio de todos clientes já conectados para o novo cliente
         for x in clientesObjeto:
             utils.sendMessageTo(clienteNovo, utils.GETCLIENTS +
                                 ' {' + x.getNomeCliente() + '}')
 
+        # Avisando a todos clientes que alguém se conectou
         for k in clientesObjeto:
             utils.sendMessageTo(k, utils.NEWCLIENTEVENT + ' Cliente {} conectado!'.format(
                 '{' + clienteNovo.getNomeCliente() + '}'

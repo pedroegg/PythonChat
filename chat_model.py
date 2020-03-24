@@ -1,3 +1,4 @@
+# Modelo cliente de dado
 class Cliente:
     def __init__(self, nomeCliente, conexaoCliente, cliente):
         self.nome = nomeCliente

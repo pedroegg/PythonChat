@@ -2,6 +2,8 @@ from socket import *
 from tkinter import *
 import chat_utils as utils
 
+# Classe de interface do chat privado
+
 
 class InterfaceGrafica(Toplevel):
     def __init__(self, nickname=None, meunickname=None, socket=None):

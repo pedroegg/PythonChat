@@ -2,6 +2,8 @@ from socket import *
 from tkinter import *
 import chat_utils as utils
 
+# Classe que manipula e mexe com a interface gráfica do chat de grupo
+
 
 class InterfaceGrafica:
     def __init__(self, master=None, socket=None):
@@ -90,6 +92,7 @@ class InterfaceGrafica:
         self.scrollBarInput.pack(expand=YES, fill=BOTH)
         self.input['yscrollcommand'] = self.scrollBarInput.set
 
+    # Função para adicionar o label de um novo conectado
     def adicionarLabelCliente(self, nickCliente):
         label = Label(self.containerTitulo, text=' "' + nickCliente + '" ')
 
@@ -98,6 +101,7 @@ class InterfaceGrafica:
         label.pack(side=LEFT)
 
         self.labelsUsuarios.append(label)
+    # Remover o label
 
     def removerLabelCliente(self, nickCliente):
         for x in self.labelsUsuarios:
@@ -109,6 +113,7 @@ class InterfaceGrafica:
                 x.pack_forget()
 
                 self.labelsUsuarios.remove(x)
+    # Função que insere a mensagem recebida no chat de grupo
 
     def inserirMensagemChat(self, mensagem):
         textoDataHorario = utils.getHorario() + ' - '
@@ -151,6 +156,7 @@ class InterfaceGrafica:
         self.input.focus_force()
 
         self.master.bell(displayof=0)
+    # Função que envia a mensagem para o servidor
 
     def enviarMensagem(self):
         mensagem = utils.encryptMessage(
@@ -165,6 +171,7 @@ class InterfaceGrafica:
         self.sockObj.sendall(utils.encryptMessage(utils.STOPPEDTYPINGEVENT))
 
         return 'break'
+    # Funçao que coloca o label de digitando
 
     def setarLabelDigitando(self, nicknameDaPessoa):
         self.labelDigitando['text'] = nicknameDaPessoa + ' está digitando...'
@@ -188,6 +195,7 @@ class InterfaceGrafica:
         else:
             if nicknameDaPessoa in self.labelsDigitando:
                 self.labelsDigitando.remove(nicknameDaPessoa)
+    # Função chamada após cada digitação de tecla
 
     def onTypeText(self, event):
         if event.keysym == 'BackSpace' and len(self.input.get('1.0', 'end-1c')) == 1:

@@ -4,6 +4,8 @@ import _thread
 import chat_utils as utils
 import chat_interfaceChatWindow as interfaceChat
 
+# Classe Interface Gráfica da lista de conectados
+
 
 class InterfaceGrafica(Toplevel):
     def __init__(self, socket, mynick):
@@ -63,6 +65,7 @@ class InterfaceGrafica(Toplevel):
 
                 self.usuariosConectados.remove(x)
 
+    # Função que abre o chat privado com alguém
     def abrirChatPrivado(self, nickname):
         if nickname != self.mynickname:
             self.interface = interfaceChat.InterfaceGrafica(
