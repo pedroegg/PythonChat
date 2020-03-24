@@ -53,7 +53,7 @@ def connectionHandler(clienteConectado):
             else:
                 if utils.checkEvent(mensagemDecrypted, utils.PRIVATEMESSAGE):
                     clientToSend = utils.getClientByName(
-                        utils.pegarNickMensagem(mensagemDecrypted, 2))
+                        clientesObjeto, utils.pegarNickMensagem(mensagemDecrypted, 2))
 
                     if clientToSend != None:
                         utils.sendMessageTo(

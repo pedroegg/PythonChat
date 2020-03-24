@@ -34,7 +34,7 @@ def getClientByName(lista, name):
     objeto = None
 
     for x in lista:
-        if x.getNomeClient() == name:
+        if x.getNomeCliente() == name:
             objeto = x
             break
 
