@@ -45,18 +45,14 @@ def pegarNickMensagem(mensagemParametro, indice):
     nickRetorno = ''
 
     x = 0
-    k = 1
-    while k <= indice:
-        while mensagemParametro[x] != '{':
-            print("caractere atual = ", mensagemParametro[x])
 
+    for k in range(0, indice, 1):
+        while mensagemParametro[x] != '{':
             x += 1
 
-        k += 1
+        x += 1
 
-    x = x + 1
     while mensagemParametro[x] != '}':
-        print("caractere atual = ", mensagemParametro[x])
         nickRetorno += mensagemParametro[x]
 
         x += 1

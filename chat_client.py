@@ -14,7 +14,6 @@ def receberMensagens(atoa):
                 mensagemRecebida = utils.decryptMessage(data)
 
                 if utils.checkEvent(mensagemRecebida, utils.PRIVATEMESSAGE):
-                    print("ENTROU NO CHECK")
                     nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
                     if interfaceLista.interface == None:
@@ -22,8 +21,6 @@ def receberMensagens(atoa):
 
                     interfaceLista.interface.inserirMensagemChat(
                         nick + ': ' + mensagemRecebida.split('}')[2])
-
-                    print("ERA PRA INSERIR")
 
                     continue
 
