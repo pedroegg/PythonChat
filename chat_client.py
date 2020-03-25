@@ -1,10 +1,9 @@
 from socket import *
 import _thread
-import threading
 from tkinter import *
-from time import sleep
 import chat_utils as utils
-import chat_interfaceGrafica as interface
+import chat_interfaceChat as interfaceChat
+import chat_interfaceLista as interfaceChatLista
 
 
 def receberMensagens(atoa):
@@ -17,11 +16,13 @@ def receberMensagens(atoa):
                     nick = utils.pegarNickMensagem(mensagemRecebida)
 
                     interface.adicionarLabelCliente(nick)
+                    interfaceLista.adicionarLabelCliente(nick)
 
                 if utils.checkEvent(mensagemRecebida, utils.ADDLABELEVENT):
                     nick = utils.pegarNickMensagem(mensagemRecebida)
 
                     interface.adicionarLabelClienteInicio(nick)
+                    interfaceLista.adicionarLabelCliente(nick)
 
                     continue
 
@@ -29,6 +30,7 @@ def receberMensagens(atoa):
                     nick = utils.pegarNickMensagem(mensagemRecebida)
 
                     interface.removerLabelCliente(nick)
+                    interfaceLista.removerLabelCliente(nick)
 
                 if utils.checkEvent(mensagemRecebida, utils.STOPPEDTYPINGEVENT):
                     nick = utils.pegarNickMensagem(mensagemRecebida)
@@ -68,7 +70,7 @@ def iniciarThreadEscutar():
 
     _thread.start_new_thread(receberMensagens, tuple([25]))
 
-    mensagem = utils.encryptMessage('newConnection ' + nickname)
+    mensagem = utils.encryptMessage(utils.NEWCONNECTIONEVENT + ' ' + nickname)
 
     sockObj.sendall(mensagem)
 
@@ -80,7 +82,7 @@ def iniciarThreadEscutar():
 
 serverHost = '0.tcp.sa.ngrok.io'
 
-serverPort = 13048
+serverPort = 15264
 
 nickname = 'Pedro Egg'
 
@@ -89,11 +91,12 @@ sockObj.connect((serverHost, serverPort))
 
 root = Tk()
 
-root.title("Chat do Egg")
+root.title("Chat em grupo")
 
 root.geometry("800x480")
 
-interface = interface.InterfaceGrafica(root, sockObj)
+interface = interfaceChat.InterfaceGrafica(root, sockObj)
+interfaceLista = interfaceChatLista.InterfaceGrafica(sockObj)
 
 # root.bind('<FocusIn>', interface.setarFocusInput)
 root.after(100, iniciarThreadEscutar)
