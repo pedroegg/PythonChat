@@ -16,8 +16,6 @@ class InterfaceGrafica:
         self.labelsUsuarios = []
         self.labelsDigitando = []
 
-        self.primeiraVez = True
-
         self.fontePadrao = ("Arial", "12")
 
         self.containerTitulo = Frame(master)
@@ -93,23 +91,7 @@ class InterfaceGrafica:
         self.input['yscrollcommand'] = self.scrollBarInput.set
 
     def adicionarLabelCliente(self, nickCliente):
-        label = None
-
-        if self.primeiraVez:
-            label = Label(self.containerTitulo, text=nickCliente)
-
-            self.primeiraVez = False
-        else:
-            label = Label(self.containerTitulo, text=',' + nickCliente)
-
-        label["font"] = ("Arial", "14")
-
-        label.pack(side=LEFT)
-
-        self.labelsUsuarios.append(label)
-
-    def adicionarLabelClienteInicio(self, nickCliente):
-        label = Label(self.containerTitulo, text=',' + nickCliente)
+        label = Label(self.containerTitulo, text=' "' + nickCliente + '" ')
 
         label["font"] = ("Arial", "14")
 

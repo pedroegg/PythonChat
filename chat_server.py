@@ -37,7 +37,7 @@ def connectionHandler(clienteConectado):
                 clientesObjeto.remove(clienteConectado)
 
                 for k in clientesObjeto:
-                    utils.sendMessageTo(k, 'disconnect ' + 'Cliente {} desconectou-se!'.format(
+                    utils.sendMessageTo(k, utils.DISCONNECTEVENT + ' Cliente {} desconectou-se!'.format(
                         '{' + nomeCliente + '}'))
 
                 break
@@ -64,7 +64,7 @@ def connectionHandler(clienteConectado):
 
             for k in clientesObjeto:
                 utils.sendMessageTo(
-                    k, 'disconnect ' + 'Cliente {} desconectou-se!'.format('{' + nomeCliente + '}'))
+                    k, utils.DISCONNECTEVENT + ' Cliente {} desconectou-se!'.format('{' + nomeCliente + '}'))
 
             break
 
@@ -91,14 +91,14 @@ while True:
 
         for k in clientesObjeto:
             if k.getNomeCliente() != clienteNovo.getNomeCliente():
-                utils.sendMessageTo(clienteNovo, 'newClient Cliente {} conectado!'.format(
+                utils.sendMessageTo(
+                    clienteNovo, utils.ADDLABELEVENT + ' {' + k.getNomeCliente() + '}')
+
+                utils.sendMessageTo(k, utils.NEWCLIENTEVENT + ' Cliente {} conectado!'.format(
                     '{' + clienteNovo.getNomeCliente() + '}'
                 ))
 
-                utils.sendMessageTo(
-                    clienteNovo, 'addLabel {' + k.getNomeCliente() + '}')
-
-        utils.sendMessageTo(clienteNovo, 'newClient Cliente {} conectado!'.format(
+        utils.sendMessageTo(clienteNovo, utils.NEWCLIENTEVENT + ' Cliente {} conectado!'.format(
             '{' + clienteNovo.getNomeCliente() + '}'
         ))
 
