@@ -42,17 +42,27 @@ def connectionHandler(clienteConectado):
 
                 break
 
+            mensagemDecrypted = utils.decryptMessage(mensagem)
             print('{}: Cliente {} enviou -> {}'.format(utils.getHorario(),
-                                                       nomeCliente, utils.decryptMessage(mensagem)))
+                                                       nomeCliente, mensagemDecrypted))
 
-            if utils.checkEvent(utils.decryptMessage(mensagem), utils.TYPINGEVENT) or utils.checkEvent(utils.decryptMessage(mensagem), utils.STOPPEDTYPINGEVENT):
-                for k in clientesObjeto:
-                    utils.sendMessageTo(k, utils.decryptMessage(
-                        mensagem) + ' {' + nomeCliente + '}')
-            else:
+            if utils.checkEvent(mensagemDecrypted, utils.TYPINGEVENT) or utils.checkEvent(mensagemDecrypted, utils.STOPPEDTYPINGEVENT):
                 for k in clientesObjeto:
                     utils.sendMessageTo(
-                        k, nomeCliente + ': ' + utils.decryptMessage(mensagem))
+                        k, mensagemDecrypted + ' {' + nomeCliente + '}')
+            else:
+                if utils.checkEvent(mensagemDecrypted, utils.PRIVATEMESSAGE):
+                    clientToSend = utils.getClientByName(
+                        utils.pegarNickMensagem(mensagemDecrypted, 2))
+
+                    if clientToSend != None:
+                        utils.sendMessageTo(
+                            clientToSend, utils.PRIVATEMESSAGE + ' ' + mensagemDecrypted)
+
+                else:
+                    for k in clientesObjeto:
+                        utils.sendMessageTo(
+                            k, nomeCliente + ': ' + utils.decryptMessage(mensagem))
 
         except Exception as e:
             print('{}: Deu ruim na conexão com o cliente {}.'.format(
@@ -87,20 +97,20 @@ while True:
 
         clienteNovo = model.Cliente(msg.split(' ', 1)[1], con, cliente)
 
-        clientesObjeto.append(clienteNovo)
+        for x in clientesObjeto:
+            utils.sendMessageTo(clienteNovo, utils.GETCLIENTS +
+                                ' {' + x.getNomeCliente() + '}')
 
         for k in clientesObjeto:
-            if k.getNomeCliente() != clienteNovo.getNomeCliente():
-                utils.sendMessageTo(
-                    clienteNovo, utils.ADDLABELEVENT + ' {' + k.getNomeCliente() + '}')
-
-                utils.sendMessageTo(k, utils.NEWCLIENTEVENT + ' Cliente {} conectado!'.format(
-                    '{' + clienteNovo.getNomeCliente() + '}'
-                ))
+            utils.sendMessageTo(k, utils.NEWCLIENTEVENT + ' Cliente {} conectado!'.format(
+                '{' + clienteNovo.getNomeCliente() + '}'
+            ))
 
         utils.sendMessageTo(clienteNovo, utils.NEWCLIENTEVENT + ' Cliente {} conectado!'.format(
             '{' + clienteNovo.getNomeCliente() + '}'
         ))
+
+        clientesObjeto.append(clienteNovo)
 
         _thread.start_new_thread(connectionHandler, tuple([clienteNovo]))
     else:

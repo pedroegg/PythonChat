@@ -13,28 +13,45 @@ def receberMensagens(atoa):
             if data:
                 mensagemRecebida = utils.decryptMessage(data)
                 if utils.checkEvent(mensagemRecebida, utils.NEWCLIENTEVENT):
-                    nick = utils.pegarNickMensagem(mensagemRecebida)
+                    nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
                     interface.adicionarLabelCliente(nick)
                     interfaceLista.adicionarLabelCliente(nick)
 
+                if utils.checkEvent(mensagemRecebida, utils.GETCLIENTS):
+                    nick = utils.pegarNickMensagem(mensagemRecebida, 1)
+
+                    interface.adicionarLabelCliente(nick)
+                    interfaceLista.adicionarLabelCliente(nick)
+
+                    continue
+
                 if utils.checkEvent(mensagemRecebida, utils.DISCONNECTEVENT):
-                    nick = utils.pegarNickMensagem(mensagemRecebida)
+                    nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
                     interface.removerLabelCliente(nick)
                     interfaceLista.removerLabelCliente(nick)
 
                 if utils.checkEvent(mensagemRecebida, utils.STOPPEDTYPINGEVENT):
-                    nick = utils.pegarNickMensagem(mensagemRecebida)
+                    nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
                     interface.removerLabelDigitando(nick)
 
                     continue
 
                 if utils.checkEvent(mensagemRecebida, utils.TYPINGEVENT):
-                    nick = utils.pegarNickMensagem(mensagemRecebida)
+                    nick = utils.pegarNickMensagem(mensagemRecebida, 1)
 
                     interface.setarLabelDigitando(nick)
+
+                    continue
+
+                if utils.checkEvent(mensagemRecebida, utils.PRIVATEMESSAGE):
+                    interfaceLista.abrirChatPrivado(
+                        utils.pegarNickMensagem(mensagemRecebida, 1))
+
+                    interfaceLista.interface.inserirMensagemChat(
+                        mensagemRecebida.split('}')[2])
 
                     continue
 
@@ -88,7 +105,7 @@ root.title("Chat em grupo")
 root.geometry("800x480")
 
 interface = interfaceChat.InterfaceGrafica(root, sockObj)
-interfaceLista = interfaceChatLista.InterfaceGrafica(sockObj)
+interfaceLista = interfaceChatLista.InterfaceGrafica(sockObj, nickname)
 
 # root.bind('<FocusIn>', interface.setarFocusInput)
 root.after(100, iniciarThreadEscutar)

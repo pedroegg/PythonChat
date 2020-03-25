@@ -5,7 +5,8 @@ STOPPEDTYPINGEVENT = 'stoppedTyping'
 DISCONNECTEVENT = 'disconnect'
 NEWCONNECTIONEVENT = 'newConnection'
 NEWCLIENTEVENT = 'newClient'
-ADDLABELEVENT = 'addLabel'
+GETCLIENTS = 'getClients'
+PRIVATEMESSAGE = 'privateMessage'
 key = 'Lampada'
 
 
@@ -29,13 +30,24 @@ def getHorario():
     return strftime("%d/%m/%Y %H:%M:%S")
 
 
-def pegarNickMensagem(mensagemParametro):
+def getClientByName(lista, name):
+    objeto = None
+
+    for x in lista:
+        if x.getNomeClient() == name:
+            objeto = x
+            break
+
+    return objeto
+
+
+def pegarNickMensagem(mensagemParametro, indice):
     nickRetorno = ''
 
     x = 0
-
-    while mensagemParametro[x] != '{':
-        x += 1
+    for k in range(0, indice, 1):
+        while mensagemParametro[x] != '{':
+            x += 1
 
     x = x + 1
     while mensagemParametro[x] != '}':
